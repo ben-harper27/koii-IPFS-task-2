@@ -1,4 +1,6 @@
 import { namespaceWrapper, app } from "@_koii/namespace-wrapper";
+import { getPinnedCIDs, addIPFSCID, getIPFSCID } from "./ipfsEndpoints.js";
+import multer from 'multer';
 
 export function routes() {
   /**
@@ -13,4 +15,15 @@ export function routes() {
     console.log("value", value);
     res.status(200).json({ value: value });
   });
+
+  const storage = multer.memoryStorage();
+  const upload = multer({
+    storage: storage,
+    limits: {
+      fileSize: 10 * 1024 * 1024,
+    },
+  });
+  app.get('/ipfs/get-pinned-cids', getPinnedCIDs);
+  app.post('/ipfs/add', upload.array('files'), addIPFSCID);
+  app.get('/ipfs/:cid/:filename?', getIPFSCID);
 }

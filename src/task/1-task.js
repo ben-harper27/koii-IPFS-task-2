@@ -1,4 +1,6 @@
 import { namespaceWrapper } from "@_koii/namespace-wrapper";
+import axios from "axios";
+import {baseIpfsApiUrl} from "./ipfsEndpoints.js";
 
 export async function task(roundNumber) {
   // Run your task and store the proofs to be submitted for auditing
@@ -6,8 +8,24 @@ export async function task(roundNumber) {
   try {
     console.log(`EXECUTE TASK FOR ROUND ${roundNumber}`);
     console.log("Started Task", new Date(), "TEST");
-    // you can optionally return this value to be used in debugging
-    await namespaceWrapper.storeSet("value", "Hello, World!");
+    const ipfsResponse = await axios.post(`${baseIpfsApiUrl}/api/v0/pin/ls`);
+    const data = ipfsResponse.data;
+    const cids = Object.keys(data.Keys);
+
+    const proofs = await Promise.all(
+      cids.map(async (cid) => {
+        const requesterPubKey = await namespaceWrapper.getMainAccountPubkey();
+        const signature = await namespaceWrapper.payloadSigning(cid);
+        return {cid, requesterPubKey, signature};
+      }),
+    );
+
+    const submission = {
+      cids,
+      proofs
+    };
+    await namespaceWrapper.storeSet("value", submission);
+    return submission;
   } catch (error) {
     console.error("EXECUTE TASK ERROR:", error);
   }
