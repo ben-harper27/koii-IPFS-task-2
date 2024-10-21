@@ -14,7 +14,8 @@ export async function task(roundNumber) {
 
     const proofs = await Promise.all(
       cids.map(async (cid) => {
-        const requesterPubKey = await namespaceWrapper.getMainAccountPubkey();
+        const keypair = await namespaceWrapper.getSubmitterAccount();
+        const requesterPubKey = keypair.publicKey;
         const signature = await namespaceWrapper.payloadSigning(cid);
         return {cid, requesterPubKey, signature};
       }),
