@@ -14,12 +14,12 @@ async function fetchFileFromIPFS(cid) {
   }
 }
 
-export async function audit(submission, roundNumber) {
+export async function audit(submission, roundNumber, submitterKey) {
   /**
    * Audit a submission
    * This function should return true if the submission is correct, false otherwise
    */
-  console.log(`AUDIT SUBMISSION FOR ROUND ${roundNumber}`);
+  console.log(`AUDIT SUBMISSION FOR ROUND ${roundNumber} from ${submitterKey}`);
   console.log(submission);
   let vote = false;
   submission = JSON.parse(submission);
@@ -27,10 +27,9 @@ export async function audit(submission, roundNumber) {
   try {
     // TODO: Check the submitter has the right to store
     for (let proof of submission.proofs) {
-      const {cid, mainAccountPubkey, stakingAccountPubkey, signature} = proof;
+      const {cid, mainAccountPubkey, signature} = proof;
       console.log('CID', cid);
       console.log('MAIN ACCOUNT PUB KEY', mainAccountPubkey);
-      console.log('STAKING ACCOUNT PUB KEY', stakingAccountPubkey);
       console.log('SIGNATURE', signature);
 
       // 1. Fetch the file from IPFS
@@ -47,8 +46,8 @@ export async function audit(submission, roundNumber) {
       vote = parsedData == cid;
       // TODO: 3. Query the node for the CID
       // 3. Query the node for the CID
-      if (taskState && taskState.ip_address_list && taskState.ip_address_list[stakingAccountPubkey]) {
-        const nodeIpAddress = taskState.ip_address_list[stakingAccountPubkey];
+      if (taskState && taskState.ip_address_list && taskState.ip_address_list[submitterKey]) {
+        const nodeIpAddress = taskState.ip_address_list[submitterKey];
         try {
           const nodeResponse = await axios.get(`${nodeIpAddress}/ipfs/${cid}`, {
             responseType: 'arraybuffer',
@@ -76,7 +75,7 @@ export async function audit(submission, roundNumber) {
           vote = false;
         }
       } else {
-        console.log(`No IP address found for requester: ${stakingAccountPubkey}`);
+        console.log(`No IP address found for submitter: ${submitterKey}`);
         vote = false;
       }
     }
