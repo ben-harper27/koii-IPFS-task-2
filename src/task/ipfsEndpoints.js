@@ -58,23 +58,23 @@ export const addIPFSCID = async (req, res) => {
       return res.status(400).send('No files were uploaded');
     }
 
-    const signature = req.body.signature;
-    const stakingWalletPubkey = req.body.stakingWalletPubkey;
-    if (!signature || !stakingWalletPubkey) {
-      return res.status(400).send('No Signature or stakingWalletPubkey provided');
-    }
-    try {
-      const fileBuffers = files.map((e) => e.buffer);
-      fileData = Buffer.concat(fileBuffers);
-      await hashFileData(fileData);
-    } catch (error) {
-      console.error(error);
-      return res.status(422).send('File hash is not signed by the wallet properly');
-    }
-    let isStakingWalletValid = await checkStakingWalletValidity(stakingWalletPubkey);
-    if (!isStakingWalletValid) {
-      return res.status(422).send('Staking wallet is not valid (Mismatch owner)');
-    }
+    // const signature = req.body.signature;
+    // const stakingWalletPubkey = req.body.stakingWalletPubkey;
+    // if (!signature || !stakingWalletPubkey) {
+    //   return res.status(400).send('No Signature or stakingWalletPubkey provided');
+    // }
+    // try {
+    //   const fileBuffers = files.map((e) => e.buffer);
+    //   fileData = Buffer.concat(fileBuffers);
+    //   await hashFileData(fileData);
+    // } catch (error) {
+    //   console.error(error);
+    //   return res.status(422).send('File hash is not signed by the wallet properly');
+    // }
+    // let isStakingWalletValid = await checkStakingWalletValidity(stakingWalletPubkey);
+    // if (!isStakingWalletValid) {
+    //   return res.status(422).send('Staking wallet is not valid (Mismatch owner)');
+    // }
 
     const formData = new FormData();
 

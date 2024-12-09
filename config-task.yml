@@ -5,10 +5,10 @@
 
 ## Task Name ##
 # Maximum 24 characters.
-task_name: "Task Name"
+task_name: "IPFS Task"
 
 ## Task Author ##
-author: "Koii"
+author: "Ben Harper"
 
 # Task Description Markdown ##
 # If you specify a markdown file, the description field will be ignored.
@@ -62,7 +62,7 @@ minimum_stake_amount: 0.1
 
 ## Task Bounty Type ##
 # KOII or KPL
-task_type: "KPL"
+task_type: "KOII"
 
 ## Token Mint Address (ONLY for KPL tasks) ##
 # The Fire Token address is provided as an example.
@@ -76,7 +76,7 @@ total_bounty_amount: 10
 ## Bounty Amount per Round ##
 # The maximum amount that can be distributed per round.
 # If the actual distribution per round exceeds this amount, the distribution list will fail.
-bounty_amount_per_round: 0.1
+bounty_amount_per_round: 0
 
 ## Allowed Failed Distributions ##
 # Number of retries allowed for the distribution list if it is fails audit.
@@ -115,7 +115,7 @@ environment: "TEST"
 #################################### FOR UPDATING TASKS ONLY ####################################
 
 ## Old Task ID ##
-task_id: ""
+task_id: "23gzrL49RTXJt9fNC2DJFpcHwDssG19aJNV5geoXdyZq"
 
 ## Migration Description ##
 migrationDescription: ""
